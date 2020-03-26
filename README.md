@@ -1,1 +1,0 @@
-# viatrumf-scraper-bff

@@ -1,8 +1,5 @@
 package no.madsopheim.viatrumf.scraper.bff;
 
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import io.quarkus.deployment.annotations.Produce;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.GET;
@@ -10,11 +7,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 @Path("/nettbutikkar")
 @Singleton

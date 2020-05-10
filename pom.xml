@@ -11,7 +11,7 @@
     <failOnMissingWebXml>false</failOnMissingWebXml>
     <maven.compiler.source>1.8</maven.compiler.source>
     <final.name>viatrumf-scraper-bff</final.name>
-    <version.quarkus>1.2.0.Final</version.quarkus>
+    <version.quarkus>1.4.2.Final</version.quarkus>
   </properties>
 
   <dependencies>

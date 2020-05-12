@@ -10,30 +10,31 @@ import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-import static java.util.stream.StreamSupport.*;
+import static java.util.stream.StreamSupport.stream;
 
 @ApplicationScoped
 public class FirestoreConnector {
 
-    private Firestore db;
     private CollectionReference collection;
 
     @Inject
     @ConfigProperty(name = "collectionName")
     String collectionName;
 
+    @Inject
+    @ConfigProperty(name = "projectId")
+    String projectId;
+
     @PostConstruct
-    public void setup() throws ExecutionException, InterruptedException {
+    public void setup() {
         String projectId = "viatrumf-scraper-271913";
-        FirestoreOptions firestoreOptions =
-                FirestoreOptions.getDefaultInstance().toBuilder()
-                        .setProjectId(projectId)
-                        .build();
-        db = firestoreOptions.getService();
-        collection = db.collection(collectionName);
+        FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance()
+                    .toBuilder()
+                    .setProjectId(projectId)
+                    .build();
+        collection = firestoreOptions.getService().collection(collectionName);
     }
 
     public List<String> finnAlleNettbutikkar() {
@@ -43,7 +44,7 @@ public class FirestoreConnector {
                 .collect(Collectors.toList());
     }
 
-    public List<Nettbutikk> query(String nettbutikknamn) throws ExecutionException, InterruptedException {
+    public List<Nettbutikk> query(String nettbutikknamn) {
         return stream(collection.document(nettbutikknamn).listCollections().spliterator(), false)
                 .map(Query::get)
                 .map(this::wrappingGet)

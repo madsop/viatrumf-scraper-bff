@@ -8,7 +8,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Path("/nettbutikkar")
 @Singleton
@@ -27,7 +26,7 @@ public class NettbutikkController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path(("{nettbutikk}"))
-    public List<Nettbutikk> hentInfoForNettbutikk(@PathParam("nettbutikk") String nettbutikk) throws ExecutionException, InterruptedException {
+    public List<Nettbutikk> hentInfoForNettbutikk(@PathParam("nettbutikk") String nettbutikk) {
         return firestoreConnector.query(nettbutikk);
     }
 }

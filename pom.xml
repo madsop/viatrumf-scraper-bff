@@ -7,9 +7,9 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <properties>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.target>11</maven.compiler.target>
     <failOnMissingWebXml>false</failOnMissingWebXml>
-    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.source>11</maven.compiler.source>
     <final.name>viatrumf-scraper-bff</final.name>
     <version.quarkus>1.4.2.Final</version.quarkus>
   </properties>

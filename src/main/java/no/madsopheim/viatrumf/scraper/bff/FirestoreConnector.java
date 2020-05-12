@@ -29,7 +29,6 @@ public class FirestoreConnector {
 
     @PostConstruct
     public void setup() {
-        String projectId = "viatrumf-scraper-271913";
         FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance()
                     .toBuilder()
                     .setProjectId(projectId)

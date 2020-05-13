@@ -44,16 +44,7 @@ Also, a simple Hello world endpoint is created, have a look at the class **Hello
 More information on MicroProfile can be found [here](https://microprofile.io/)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+Links:
+* https://mydeveloperplanet.com/2019/05/08/automatic-builds-at-your-fingertips-with-gcp-cloud-build/
+* https://cloud.google.com/cloud-build/docs/build-config?_ga=2.48819297.-636310829.1581871509#yaml
+* https://cloud.google.com/cloud-build/docs/automating-builds/run-builds-on-github

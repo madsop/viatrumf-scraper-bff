@@ -5,7 +5,7 @@ import com.google.cloud.firestore.*;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.StreamSupport.stream;
 
-@ApplicationScoped
+@Dependent
 public class FirestoreConnector {
 
     private CollectionReference collection;

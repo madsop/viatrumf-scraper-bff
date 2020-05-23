@@ -1,4 +1,6 @@
 module viatrumf.scraper.bff {
+    exports no.madsopheim.viatrumf.scraper.bff.api;
+
     requires java.compiler;
     requires java.ws.rs;
     requires java.xml.bind;

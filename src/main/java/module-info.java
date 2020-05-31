@@ -11,4 +11,5 @@ module viatrumf.scraper.bff {
     requires java.annotation;
     requires cdi.api;
     requires javax.inject;
+    requires microprofile.openapi.api;
 }

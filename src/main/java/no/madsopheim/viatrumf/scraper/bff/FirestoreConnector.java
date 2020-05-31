@@ -1,10 +1,12 @@
 package no.madsopheim.viatrumf.scraper.bff;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.*;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import org.eclipse.microprofile.opentracing.Traced;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Collection;
@@ -15,40 +17,25 @@ import java.util.stream.Collectors;
 import static java.util.stream.StreamSupport.stream;
 
 @ApplicationScoped
+@Traced
 public class FirestoreConnector {
 
-    private CollectionReference collection;
-
     @Inject
-    @ConfigProperty(name = "collectionName")
-    String collectionName;
-
-    @Inject
-    @ConfigProperty(name = "projectId")
-    String projectId;
-
-    @PostConstruct
-    public void setup() {
-        FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance()
-                    .toBuilder()
-                    .setProjectId(projectId)
-                    .build();
-        collection = firestoreOptions.getService().collection(collectionName);
-    }
+    NettbutikkRepository nettbutikkRepository;
 
     public boolean isReady() {
-        return collection != null;
+        return nettbutikkRepository.isReady();
     }
 
     public List<String> finnAlleNettbutikkar() {
-        return stream(collection.listDocuments().spliterator(), false)
+        return stream(nettbutikkRepository.listDocuments().spliterator(), true)
                 .map(DocumentReference::getPath)
-                .map(path -> path.replace(collectionName + "/", ""))
+                .map(nettbutikkRepository::removeCollectionName)
                 .collect(Collectors.toList());
     }
 
     public List<Nettbutikk> query(String nettbutikknamn) {
-        return stream(collection.document(nettbutikknamn).listCollections().spliterator(), false)
+        return stream(nettbutikkRepository.document(nettbutikknamn).listCollections().spliterator(), false)
                 .map(Query::get)
                 .map(this::wrappingGet)
                 .map(QuerySnapshot::getDocuments)

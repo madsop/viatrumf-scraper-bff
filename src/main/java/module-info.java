@@ -12,4 +12,5 @@ module viatrumf.scraper.bff {
     requires cdi.api;
     requires javax.inject;
     requires microprofile.openapi.api;
+    requires microprofile.health.api;
 }

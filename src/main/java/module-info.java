@@ -13,4 +13,5 @@ module viatrumf.scraper.bff {
     requires javax.inject;
     requires microprofile.openapi.api;
     requires microprofile.health.api;
+    requires microprofile.opentracing.api;
 }

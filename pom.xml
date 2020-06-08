@@ -86,7 +86,7 @@
       <dependency>
         <groupId>org.checkerframework</groupId>
         <artifactId>checker-qual</artifactId>
-        <version>2.11.1</version>
+        <version>3.4.1</version>
       </dependency>
       <dependency>
         <groupId>com.google.auth</groupId>

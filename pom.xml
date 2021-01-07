@@ -13,7 +13,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.version>1.10.5.Final</quarkus.version>
-    <version.microprofile>4.0</version.microprofile>
+    <version.microprofile>4.0.1</version.microprofile>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     <final.name>viatrumf-scraper-bff</final.name>
   </properties>

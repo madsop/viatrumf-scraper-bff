@@ -24,3 +24,4 @@ hs_err_pid*
 target/*
 .idea/*
 viatrumf-scraper-2859fc6ccf35.json
+*.iml

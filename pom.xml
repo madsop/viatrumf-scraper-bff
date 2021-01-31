@@ -12,8 +12,8 @@
     <maven.compiler.target>11</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkus.version>1.10.5.Final</quarkus.version>
-    <version.microprofile>4.0.1</version.microprofile>
+    <quarkus.version>1.11.1.Final</quarkus.version>
+    <version.microprofile>3.3</version.microprofile>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     <final.name>viatrumf-scraper-bff</final.name>
   </properties>
@@ -30,111 +30,14 @@
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>libraries-bom</artifactId>
-        <version>16.2.1</version>
+        <version>16.3.0</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.google.protobuf</groupId>
-        <artifactId>protobuf-java</artifactId>
-        <version>3.14.0</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.cloud</groupId>
-        <artifactId>google-cloud-firestore</artifactId>
-        <version>2.1.0</version>
-        <exclusions>
-          <exclusion>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.microprofile</groupId>
-        <artifactId>microprofile</artifactId>
-        <version>${version.microprofile}</version>
-        <type>pom</type>
-        <scope>provided</scope>
-        <exclusions>
-          <exclusion>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <!-- from here and onwards to achieve upper bounds -->
-      <dependency>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-        <version>29.0-jre</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jboss.logging</groupId>
-        <artifactId>jboss-logging</artifactId>
-        <version>3.4.1.Final</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.http-client</groupId>
-        <artifactId>google-http-client</artifactId>
-        <version>1.38.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.checkerframework</groupId>
-        <artifactId>checker-qual</artifactId>
-        <version>3.9.0</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.auth</groupId>
-        <artifactId>google-auth-library-bom</artifactId>
-        <version>0.22.2</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.google.auth</groupId>
-        <artifactId>google-auth-library-oauth2-http</artifactId>
-        <version>0.22.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.threeten</groupId>
-        <artifactId>threetenbp</artifactId>
-        <version>1.5.0</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.errorprone</groupId>
-        <artifactId>error_prone_annotations</artifactId>
-        <version>2.4.0</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.code.gson</groupId>
-        <artifactId>gson</artifactId>
-        <version>2.8.6</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.auth</groupId>
-        <artifactId>google-auth-library-credentials</artifactId>
-        <version>0.22.2</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-        <version>2.12.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
-    <dependency>
-      <groupId>org.eclipse.microprofile</groupId>
-      <artifactId>microprofile</artifactId>
-      <type>pom</type>
-      <scope>provided</scope>
-    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy</artifactId>
@@ -244,11 +147,7 @@
                   <requireMavenVersion>
                     <version>3.6.3</version>
                   </requireMavenVersion>
-                  <requireUpperBoundDeps>
-                    <excludes>
-                      <exclude>io.opentracing:opentracing-api</exclude>
-                    </excludes>
-                  </requireUpperBoundDeps>
+                  <dependencyConvergence />
                 </rules>
               </configuration>
             </execution>

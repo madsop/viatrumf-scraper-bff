@@ -1,6 +1,25 @@
 steps:
+  # Create docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-f', 'Dockerfile', '-t', 'gcr.io/$PROJECT_ID/bff-test', '.']
+    args: ['build', '-f', 'Dockerfile', '-t', 'gcr.io/$PROJECT_ID/viatrumf-scraper-bff', '.']
+
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/viatrumf-scraper-bff']
+
+  # Start up a cloud instance
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      [
+          'beta',
+          'run',
+          'deploy',
+          'viatrumf-scraper-bff',
+          '--image', 'gcr.io/$PROJECT_ID/viatrumf-scraper-bff',
+          '--allow-unauthenticated',
+          '--platform=managed',
+          '--region=europe-west1'
+      ]
 options:
   machineType: N1_HIGHCPU_32
-images: ['gcr.io/$PROJECT_ID/bff-test']
+images: ['gcr.io/$PROJECT_ID/viatrumf-scraper-bff']

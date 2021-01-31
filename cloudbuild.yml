@@ -4,4 +4,6 @@ steps:
     args: ['clean', 'install', '-DskipTests']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-f', 'src/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/bff-test', '.']
+options:
+  machineType: N1_HIGHCPU_32
 images: ['gcr.io/$PROJECT_ID/bff-test']

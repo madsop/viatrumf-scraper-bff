@@ -43,8 +43,9 @@
       <artifactId>quarkus-resteasy</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.cloud</groupId>
-      <artifactId>google-cloud-firestore</artifactId>
+      <groupId>io.quarkiverse.googlecloudservices</groupId>
+      <artifactId>quarkus-google-cloud-firestore</artifactId>
+      <version>0.4.0</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -176,6 +177,7 @@
         </property>
       </activation>
       <properties>
+        <quarkus.native.native-image-xmx>16g</quarkus.native.native-image-xmx>
         <quarkus.package.type>native</quarkus.package.type>
       </properties>
     </profile>

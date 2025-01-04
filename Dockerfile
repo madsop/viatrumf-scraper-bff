@@ -2,7 +2,6 @@ FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:23.1-java21 AS native-bui
 COPY --chown=quarkus:quarkus mvnw /code/mvnw
 COPY --chown=quarkus:quarkus .mvn /code/.mvn
 COPY --chown=quarkus:quarkus pom.xml /code/
-COPY --chown=quarkus:quarkus .editorconfig /code/.editorconfig
 USER root
 RUN chown -R quarkus:quarkus /code
 USER quarkus

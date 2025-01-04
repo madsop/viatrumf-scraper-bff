@@ -1,11 +1,11 @@
 package no.madsopheim.viatrumf.scraper.bff;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import no.madsopheim.viatrumf.scraper.bff.api.INettbutikkController;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import java.util.List;
 
 @Path("/nettbutikkar")

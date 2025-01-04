@@ -2,7 +2,7 @@ package no.madsopheim.viatrumf.scraper.bff;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.Firestore;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.PostConstruct;
@@ -19,18 +19,13 @@ public class NettbutikkRepository {
     String collectionName;
 
     @Inject
-    @ConfigProperty(name = "projectId")
-    String projectId;
+    Firestore firestore;
 
     private Pattern pattern;
 
     @PostConstruct
     public void setup() {
-        FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance()
-                .toBuilder()
-                .setProjectId(projectId)
-                .build();
-        collection = firestoreOptions.getService().collection(collectionName);
+        collection = firestore.collection(collectionName);
         pattern = Pattern.compile(collectionName + "/");
     }
 

@@ -1,32 +1,22 @@
-# Step 1: build the native image
-FROM ghcr.io/graalvm/graalvm-ce:java11-21.0.0 as graalvm
-COPY . /home/app
-WORKDIR /home/app
+FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:23.1-java21 AS native-build
+COPY --chown=quarkus:quarkus mvnw /code/mvnw
+COPY --chown=quarkus:quarkus .mvn /code/.mvn
+COPY --chown=quarkus:quarkus pom.xml /code/
+COPY --chown=quarkus:quarkus .editorconfig /code/.editorconfig
+USER root
+RUN chown -R quarkus:quarkus /code
+USER quarkus
+WORKDIR /code
+RUN ./mvnw -B org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
+COPY src /code/src
+RUN ./mvnw package -B -e -Dnative
 
-# Download and install Maven
-ARG MAVEN_VERSION=3.6.3
-ARG USER_HOME_DIR="/root"
-ARG SHA=c35a1803a6e70a126e80b2b3ae33eed961f83ed74d18fcd16909b2d44d7dada3203f1ffe726c17ef8dcca2dcaa9fca676987befeadc9b9f759967a8cb77181c0
-ARG BASE_URL=https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries
-
-RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
-  && curl -fsSL -o /tmp/apache-maven.tar.gz ${BASE_URL}/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
-  && echo "${SHA}  /tmp/apache-maven.tar.gz" | sha512sum -c - \
-  && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
-  && rm -f /tmp/apache-maven.tar.gz \
-  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
-
-ENV GOOGLE_APPLICATION_CREDENTIALS=gcp.json
-ENV MAVEN_HOME /usr/share/maven
-ENV GRAALVM_HOME $JAVA_HOME
-RUN ${GRAALVM_HOME}/bin/gu install native-image
-
-RUN $MAVEN_HOME/bin/mvn clean package -Pnative -B -e
-
-# Step 2: build the running container
-FROM registry.fedoraproject.org/fedora-minimal
+# Create the docker final image
+FROM quay.io/quarkus/quarkus-micro-image:2.0
 WORKDIR /work/
-COPY --from=graalvm /home/app/target/*-runner /work/application
+COPY --from=native-build /code/target/*-runner /work/application
 RUN chmod 775 /work
+USER nonroot
 EXPOSE 8080
-ENTRYPOINT ["./application", "-Dquarkus.http.host=0.0.0.0"]
+ENTRYPOINT [ "/work/application" ]
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]

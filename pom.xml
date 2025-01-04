@@ -8,13 +8,11 @@
 
   <properties>
     <maven.compiler.parameters>true</maven.compiler.parameters>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkus.version>1.12.2.Final</quarkus.version>
-    <version.microprofile>3.3</version.microprofile>
-    <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
+    <quarkus.version>2.16.4.Final</quarkus.version>
     <final.name>viatrumf-scraper-bff</final.name>
   </properties>
 
@@ -24,13 +22,6 @@
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-universe-bom</artifactId>
         <version>${quarkus.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.google.cloud</groupId>
-        <artifactId>libraries-bom</artifactId>
-        <version>20.2.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -45,7 +36,7 @@
     <dependency>
       <groupId>io.quarkiverse.googlecloudservices</groupId>
       <artifactId>quarkus-google-cloud-firestore</artifactId>
-      <version>0.5.0</version>
+      <version>1.4.0</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -67,10 +58,6 @@
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-      </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
@@ -83,27 +70,6 @@
               <goals>
                 <goal>build</goal>
               </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.0.0-M3</version>
-          <executions>
-            <execution>
-              <id>enforce-maven</id>
-              <goals>
-                <goal>enforce</goal>
-              </goals>
-              <configuration>
-                <rules>
-                  <requireMavenVersion>
-                    <version>3.8.8</version>
-                  </requireMavenVersion>
-<!--                  <dependencyConvergence /> -->
-                </rules>
-              </configuration>
             </execution>
           </executions>
         </plugin>

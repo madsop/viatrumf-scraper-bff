@@ -5,7 +5,6 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import org.eclipse.microprofile.opentracing.Traced;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 import static java.util.stream.StreamSupport.stream;
 
 @ApplicationScoped
-@Traced
 public class FirestoreConnector {
 
     @Inject

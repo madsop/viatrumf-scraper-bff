@@ -6,7 +6,7 @@ USER root
 RUN chown -R quarkus:quarkus /code
 USER quarkus
 WORKDIR /code
-RUN ./mvnw -B org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
+RUN ./mvnw -B org.apache.maven.plugins:maven-dependency-plugin:3.11.0:go-offline
 COPY src /code/src
 RUN ./mvnw package -B -e -Dnative
 

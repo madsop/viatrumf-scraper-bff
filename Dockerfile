@@ -1,4 +1,4 @@
-FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:23.1-java21 AS native-build
+FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:25.0-java25 AS native-build
 COPY --chown=quarkus:quarkus mvnw /code/mvnw
 COPY --chown=quarkus:quarkus .mvn /code/.mvn
 COPY --chown=quarkus:quarkus pom.xml /code/

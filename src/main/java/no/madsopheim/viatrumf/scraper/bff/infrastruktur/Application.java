@@ -1,4 +1,4 @@
-package no.madsopheim.viatrumf.scraper.bff;
+package no.madsopheim.viatrumf.scraper.bff.infrastruktur;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
 

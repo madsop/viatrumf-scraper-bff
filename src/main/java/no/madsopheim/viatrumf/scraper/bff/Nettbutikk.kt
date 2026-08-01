@@ -9,4 +9,13 @@ data class Nettbutikk(
     val verdi: String,
     val timestamp: LocalDateTime,
     val kategori: String?
-)
+) {
+    constructor(stringObjectMap: Map<String, Any>) : this(
+        namn = stringObjectMap["namn"].toString(),
+        href = stringObjectMap["href"].toString(),
+        popularitet = stringObjectMap["popularitet"].toString(),
+        verdi = stringObjectMap["verdi"].toString(),
+        timestamp = LocalDateTime.parse(stringObjectMap["timestamp"].toString(), datePattern),
+        kategori = stringObjectMap["kategori"]?.toString()?.takeIf { it.isNotEmpty() }
+    )
+}

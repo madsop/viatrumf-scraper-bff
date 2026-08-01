@@ -5,25 +5,22 @@ import com.google.cloud.firestore.Firestore
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
 import java.time.format.DateTimeFormatter
-import java.util.regex.Pattern
 
 @ApplicationScoped
 class FirestoreConnector(val firestore: Firestore) {
 
     private val collections: MutableMap<CollectionName, CollectionReference> = mutableMapOf()
-    private val patterns: MutableMap<CollectionName, Pattern> = mutableMapOf()
 
     @PostConstruct
     fun setup() {
         CollectionName.entries.forEach {
             collections[it] = firestore.collection(it.mappenamn)
-            patterns[it] = Pattern.compile("${it.mappenamn}/")
         }
     }
 
     fun finnAlleNettbutikkar(collection: CollectionName): List<String> = collections[collection]!!.listDocuments()
         .map { it.path }
-        .map { patterns[collection]!!.matcher(it).replaceFirst("") }
+        .map { it.removePrefix("${collection.mappenamn}/") }
 
     fun query(collection: CollectionName, nettbutikknamn: String): List<Nettbutikk> =
         collections[collection]!!.document(nettbutikknamn).listCollections()

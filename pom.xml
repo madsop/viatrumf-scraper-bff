@@ -16,7 +16,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.version>3.38.0</quarkus.version>
     <final.name>viatrumf-scraper-bff</final.name>
-    <kotlin.version>2.3.20</kotlin.version>
+    <kotlin.version>2.4.10</kotlin.version>
   </properties>
 
   <dependencyManagement>

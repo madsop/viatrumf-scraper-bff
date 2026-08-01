@@ -19,17 +19,16 @@ class FirestoreConnector(val nettbutikkRepository: NettbutikkRepository) {
         .asSequence()
         .map { it.get() }
         .map { future -> this.wrappingGet(future) }
-        .map { it.documents }
-        .flatMap { it }
+        .flatMap { it.documents }
         .map { it.getData() }
         .map { joinData(it) }
         .toList()
 
-    fun wrappingGet(future: ApiFuture<QuerySnapshot?>): QuerySnapshot = try {
+    fun wrappingGet(future: ApiFuture<QuerySnapshot>): QuerySnapshot = try {
         future.get()
     } catch (e: Exception) {
         throw RuntimeException(e)
-    }!!
+    }
 
     private fun joinData(stringObjectMap: Map<String, Any>) = Nettbutikk(
         stringObjectMap["namn"] as String,

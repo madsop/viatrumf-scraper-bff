@@ -10,9 +10,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty
 import java.util.regex.Pattern
 
 @ApplicationScoped
-class NettbutikkRepository(
-    @Inject val firestore: Firestore
-) {
+class NettbutikkRepository(val firestore: Firestore) {
     private var collection: CollectionReference? = null
 
     @Inject
@@ -34,5 +32,5 @@ class NettbutikkRepository(
     val isReady: Boolean
         get() = collection != null
 
-    fun removeCollectionName(path: String) = pattern!!.matcher(path).replaceFirst("")
+    fun removeCollectionName(path: String): String = pattern!!.matcher(path).replaceFirst("")
 }

@@ -1,65 +1,76 @@
-package no.madsopheim.viatrumf.scraper.bff;
+package no.madsopheim.viatrumf.scraper.bff
 
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Query;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static java.util.stream.StreamSupport.stream;
+import no.madsopheim.viatrumf.scraper.bff.NettbutikkRepository.isReady
+import no.madsopheim.viatrumf.scraper.bff.NettbutikkRepository.listDocuments
+import no.madsopheim.viatrumf.scraper.bff.NettbutikkRepository.document
+import jakarta.xml.bind.annotation.XmlRootElement
+import no.madsopheim.viatrumf.scraper.bff.Nettbutikk
+import jakarta.inject.Singleton
+import no.madsopheim.viatrumf.scraper.bff.api.INettbutikkController
+import no.madsopheim.viatrumf.scraper.bff.FirestoreConnector
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.container.ContainerResponseFilter
+import jakarta.ws.rs.container.ContainerRequestContext
+import jakarta.ws.rs.container.ContainerResponseContext
+import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition
+import org.eclipse.microprofile.health.Readiness
+import jakarta.enterprise.context.ApplicationScoped
+import no.madsopheim.viatrumf.scraper.bff.NettbutikkRepository
+import java.util.stream.StreamSupport
+import com.google.cloud.firestore.DocumentReference
+import java.util.stream.Collectors
+import com.google.cloud.firestore.CollectionReference
+import com.google.api.core.ApiFuture
+import com.google.cloud.firestore.QuerySnapshot
+import com.google.cloud.firestore.QueryDocumentSnapshot
+import jakarta.inject.Inject
+import java.lang.Exception
+import java.lang.RuntimeException
 
 @ApplicationScoped
-public class FirestoreConnector {
-
+class FirestoreConnector {
     @Inject
-    NettbutikkRepository nettbutikkRepository;
+    var nettbutikkRepository: NettbutikkRepository? = null
 
-    public boolean isReady() {
-        return nettbutikkRepository.isReady();
+    val isReady: Boolean
+        get() = nettbutikkRepository!!.isReady
+
+    fun finnAlleNettbutikkar(): MutableList<String?> {
+        return StreamSupport.stream<DocumentReference?>(nettbutikkRepository!!.listDocuments().spliterator(), true)
+            .map<String?> { obj: DocumentReference? -> obj!!.getPath() }
+            .map<String?> { path: String? -> nettbutikkRepository!!.removeCollectionName(path!!) }
+            .collect(Collectors.toList())
     }
 
-    public List<String> finnAlleNettbutikkar() {
-        return stream(nettbutikkRepository.listDocuments().spliterator(), true)
-                .map(DocumentReference::getPath)
-                .map(nettbutikkRepository::removeCollectionName)
-                .collect(Collectors.toList());
+    fun query(nettbutikknamn: String): MutableList<Nettbutikk?> {
+        return StreamSupport.stream<CollectionReference?>(
+            nettbutikkRepository!!.document(nettbutikknamn).listCollections().spliterator(), false
+        )
+            .map<ApiFuture<QuerySnapshot?>?> { obj: CollectionReference? -> obj!!.get() }
+            .map<QuerySnapshot?> { future: ApiFuture<QuerySnapshot?>? -> this.wrappingGet(future!!) }
+            .map<MutableList<QueryDocumentSnapshot?>?> { obj: QuerySnapshot? -> obj!!.getDocuments() }
+            .flatMap<QueryDocumentSnapshot?> { obj: MutableList<QueryDocumentSnapshot?>? -> obj!!.stream() }
+            .map<MutableMap<String?, Any?>?> { obj: QueryDocumentSnapshot? -> obj!!.getData() }
+            .map<Nettbutikk?> { stringObjectMap: MutableMap<String?, Any?>? -> this.joinData(stringObjectMap!!) }
+            .collect(Collectors.toList())
     }
 
-    public List<Nettbutikk> query(String nettbutikknamn) {
-        return stream(nettbutikkRepository.document(nettbutikknamn).listCollections().spliterator(), false)
-                .map(Query::get)
-                .map(this::wrappingGet)
-                .map(QuerySnapshot::getDocuments)
-                .flatMap(Collection::stream)
-                .map(QueryDocumentSnapshot::getData)
-                .map(this::joinData)
-                .collect(Collectors.toList());
-    }
-
-    QuerySnapshot wrappingGet(ApiFuture<QuerySnapshot> future) {
+    fun wrappingGet(future: ApiFuture<QuerySnapshot?>): QuerySnapshot? {
         try {
-            return future.get();
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
+            return future.get()
+        } catch (e: Exception) {
+            throw RuntimeException(e)
         }
     }
 
-    private Nettbutikk joinData(Map<String, Object> stringObjectMap) {
-        return new Nettbutikk(
-                (String) stringObjectMap.get("namn"),
-                (String) stringObjectMap.get("href"),
-                (String) stringObjectMap.get("popularitet"),
-                (String) stringObjectMap.get("verdi"),
-                (String) stringObjectMap.get("timestamp"),
-                (String) stringObjectMap.get("kategori")
-        );
+    private fun joinData(stringObjectMap: MutableMap<String?, Any?>): Nettbutikk {
+        return Nettbutikk(
+            stringObjectMap.get("namn") as String?,
+            stringObjectMap.get("href") as String?,
+            stringObjectMap.get("popularitet") as String?,
+            stringObjectMap.get("verdi") as String?,
+            stringObjectMap.get("timestamp") as String?,
+            stringObjectMap.get("kategori") as String?
+        )
     }
 }

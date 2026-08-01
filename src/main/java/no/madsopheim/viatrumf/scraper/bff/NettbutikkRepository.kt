@@ -1,47 +1,45 @@
-package no.madsopheim.viatrumf.scraper.bff;
+package no.madsopheim.viatrumf.scraper.bff
 
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
-import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
-import java.util.regex.Pattern;
+import com.google.cloud.firestore.CollectionReference
+import com.google.cloud.firestore.DocumentReference
+import com.google.cloud.firestore.Firestore
+import jakarta.annotation.PostConstruct
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
+import org.eclipse.microprofile.config.inject.ConfigProperty
+import java.util.regex.Pattern
 
 @ApplicationScoped
-public class NettbutikkRepository {
-    private CollectionReference collection;
+class NettbutikkRepository {
+    private var collection: CollectionReference? = null
 
     @Inject
     @ConfigProperty(name = "collectionName")
-    String collectionName;
+    var collectionName: String? = null
 
     @Inject
-    Firestore firestore;
+    var firestore: Firestore? = null
 
-    private Pattern pattern;
+    private var pattern: Pattern? = null
 
     @PostConstruct
-    public void setup() {
-        collection = firestore.collection(collectionName);
-        pattern = Pattern.compile(collectionName + "/");
+    fun setup() {
+        collection = firestore!!.collection(collectionName!!)
+        pattern = Pattern.compile(collectionName + "/")
     }
 
-    public Iterable<DocumentReference> listDocuments() {
-        return collection.listDocuments();
+    fun listDocuments(): Iterable<DocumentReference?> {
+        return collection!!.listDocuments()
     }
 
-    public DocumentReference document(String nettbutikknamn) {
-        return collection.document(nettbutikknamn);
+    fun document(nettbutikknamn: String): DocumentReference {
+        return collection!!.document(nettbutikknamn)
     }
 
-    public boolean isReady() {
-        return collection != null;
-    }
+    val isReady: Boolean
+        get() = collection != null
 
-    public String removeCollectionName(String path) {
-        return pattern.matcher(path).replaceFirst("");
+    fun removeCollectionName(path: String): String? {
+        return pattern!!.matcher(path).replaceFirst("")
     }
 }

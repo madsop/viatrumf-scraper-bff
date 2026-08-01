@@ -7,13 +7,19 @@ data class Nettbutikk(
     val href: String,
     val verdi: String,
     val timestamp: LocalDateTime,
-    val kategori: String?
+    val kategori: String?,
+    val type: Type?
 ) {
     constructor(stringObjectMap: Map<String, Any>) : this(
         namn = stringObjectMap["namn"].toString(),
         href = stringObjectMap["href"].toString(),
         verdi = stringObjectMap["verdi"]?.toString()?.takeIf { it.isNotEmpty() } ?: stringObjectMap["points"].toString(),
         timestamp = LocalDateTime.parse(stringObjectMap["timestamp"].toString(), datePattern),
-        kategori = stringObjectMap["kategori"]?.toString()?.takeIf { it.isNotEmpty() }
+        kategori = stringObjectMap["kategori"]?.toString()?.takeIf { it.isNotEmpty() },
+        type = stringObjectMap["currency"]?.toString()?.takeIf { it.isNotEmpty() }?.let { Type.valueOf(it.uppercase()) }
     )
+}
+
+enum class Type {
+    PROSENT, NOK
 }

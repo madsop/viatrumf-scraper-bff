@@ -1,4 +1,4 @@
-package no.madsopheim.viatrumf.scraper.bff.infrastruktur
+package no.madsopheim.viatrumf.scraper.bff
 
 import jakarta.ws.rs.container.ContainerRequestContext
 import jakarta.ws.rs.container.ContainerResponseContext

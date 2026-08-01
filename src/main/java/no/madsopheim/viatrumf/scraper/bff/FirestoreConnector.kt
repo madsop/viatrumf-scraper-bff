@@ -1,21 +1,25 @@
 package no.madsopheim.viatrumf.scraper.bff
 
+import com.google.cloud.firestore.CollectionReference
+import com.google.cloud.firestore.DocumentReference
+import com.google.cloud.firestore.Firestore
+import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
+import org.eclipse.microprofile.config.inject.ConfigProperty
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.regex.Pattern
 
 @ApplicationScoped
-class FirestoreConnector(val nettbutikkRepository: NettbutikkRepository) {
+class FirestoreConnector(val firestore: Firestore) {
 
-    val isReady: Boolean
-        get() = nettbutikkRepository.isReady
-
-    fun finnAlleNettbutikkar(): List<String> = nettbutikkRepository.listDocuments()
+    fun finnAlleNettbutikkar(): List<String> = listDocuments()
         .map { it.path }
-        .map { nettbutikkRepository.removeCollectionName(it) }
+        .map { removeCollectionName(it) }
 
     fun query(nettbutikknamn: String): List<Nettbutikk> =
-        nettbutikkRepository.document(nettbutikknamn).listCollections()
+        document(nettbutikknamn).listCollections()
         .asSequence()
         .map { it.get() }
         .map { it.get() }
@@ -34,4 +38,26 @@ class FirestoreConnector(val nettbutikkRepository: NettbutikkRepository) {
     )
 
     private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'")
+    private var collection: CollectionReference? = null
+
+    @Inject
+    @ConfigProperty(name = "collectionName")
+    var collectionName: String? = null
+
+    private var pattern: Pattern? = null
+
+    @PostConstruct
+    fun setup() {
+        collection = firestore.collection(collectionName!!)
+        pattern = Pattern.compile("$collectionName/")
+    }
+
+    fun listDocuments(): Iterable<DocumentReference> = collection!!.listDocuments()
+
+    fun document(nettbutikknamn: String): DocumentReference = collection!!.document(nettbutikknamn)
+
+    val isReady: Boolean
+        get() = collection != null
+
+    fun removeCollectionName(path: String): String = pattern!!.matcher(path).replaceFirst("")
 }

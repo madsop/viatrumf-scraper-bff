@@ -36,6 +36,6 @@ class FirestoreConnector(val nettbutikkRepository: NettbutikkRepository) {
         stringObjectMap["popularitet"] as String,
         stringObjectMap["verdi"] as String,
         stringObjectMap["timestamp"] as String,
-        stringObjectMap["kategori"] as String
+        stringObjectMap["kategori"] as String?
     )
 }

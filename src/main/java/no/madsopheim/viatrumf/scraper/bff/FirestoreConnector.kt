@@ -35,8 +35,3 @@ class FirestoreConnector(val firestore: Firestore) {
 }
 
 val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'")
-
-enum class CollectionName(val mappenamn: String) {
-    TRUMF_NETTHANDEL("viatrumf-scraper2"),
-    SAS_ONLINE_SHOPPING("sasOnlineShopping")
-}

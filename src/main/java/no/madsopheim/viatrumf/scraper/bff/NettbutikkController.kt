@@ -14,10 +14,11 @@ class NettbutikkController(val firestoreConnector: FirestoreConnector) {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
     @GET
-    fun alleNettbutikkar(): List<String> = firestoreConnector.finnAlleNettbutikkar()
+    fun alleNettbutikkar(): List<String> = firestoreConnector.finnAlleNettbutikkar(CollectionName.TRUMF_NETTHANDEL)
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{nettbutikk}")
-    fun hentInfoForNettbutikk(@PathParam("nettbutikk") nettbutikk: String): List<Nettbutikk> = firestoreConnector.query(nettbutikk)
+    fun hentInfoForNettbutikk(@PathParam("nettbutikk") nettbutikk: String): List<Nettbutikk> = firestoreConnector.query(
+        CollectionName.TRUMF_NETTHANDEL, nettbutikk)
 }

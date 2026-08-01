@@ -4,34 +4,29 @@ import com.google.cloud.firestore.CollectionReference
 import com.google.cloud.firestore.Firestore
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
-import jakarta.inject.Inject
-import org.eclipse.microprofile.config.inject.ConfigProperty
 import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern
 
 @ApplicationScoped
 class FirestoreConnector(val firestore: Firestore) {
 
-    private var collection: CollectionReference? = null
-
-    @Inject
-    @ConfigProperty(name = "collectionName")
-    var collectionName: String? = null
-
-    private var pattern: Pattern? = null
+    private val collections: MutableMap<CollectionName, CollectionReference> = mutableMapOf()
+    private val patterns: MutableMap<CollectionName, Pattern> = mutableMapOf()
 
     @PostConstruct
     fun setup() {
-        collection = firestore.collection(collectionName!!)
-        pattern = Pattern.compile("$collectionName/")
+        CollectionName.entries.forEach {
+            collections[it] = firestore.collection(it.mappenamn)
+            patterns[it] = Pattern.compile("${it.mappenamn}/")
+        }
     }
 
-    fun finnAlleNettbutikkar(): List<String> = collection!!.listDocuments()
+    fun finnAlleNettbutikkar(collection: CollectionName): List<String> = collections[collection]!!.listDocuments()
         .map { it.path }
-        .map { pattern!!.matcher(it).replaceFirst("") }
+        .map { patterns[collection]!!.matcher(it).replaceFirst("") }
 
-    fun query(nettbutikknamn: String): List<Nettbutikk> =
-        collection!!.document(nettbutikknamn).listCollections()
+    fun query(collection: CollectionName, nettbutikknamn: String): List<Nettbutikk> =
+        collections[collection]!!.document(nettbutikknamn).listCollections()
         .asSequence()
         .map { it.get() }
         .map { it.get() }
@@ -43,3 +38,8 @@ class FirestoreConnector(val firestore: Firestore) {
 }
 
 val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'")
+
+enum class CollectionName(val mappenamn: String) {
+    TRUMF_NETTHANDEL("viatrumf-scraper2"),
+    SAS_ONLINE_SHOPPING("sasOnlineShopping")
+}

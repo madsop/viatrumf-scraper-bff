@@ -1,8 +1,8 @@
 package no.madsopheim.viatrumf.scraper.bff
 
-import com.google.api.core.ApiFuture
-import com.google.cloud.firestore.QuerySnapshot
 import jakarta.enterprise.context.ApplicationScoped
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @ApplicationScoped
 class FirestoreConnector(val nettbutikkRepository: NettbutikkRepository) {
@@ -18,24 +18,20 @@ class FirestoreConnector(val nettbutikkRepository: NettbutikkRepository) {
         nettbutikkRepository.document(nettbutikknamn).listCollections()
         .asSequence()
         .map { it.get() }
-        .map { future -> this.wrappingGet(future) }
+        .map { it.get() }
         .flatMap { it.documents }
         .map { it.getData() }
         .map { joinData(it) }
         .toList()
-
-    fun wrappingGet(future: ApiFuture<QuerySnapshot>): QuerySnapshot = try {
-        future.get()
-    } catch (e: Exception) {
-        throw RuntimeException(e)
-    }
 
     private fun joinData(stringObjectMap: Map<String, Any>) = Nettbutikk(
         stringObjectMap["namn"] as String,
         stringObjectMap["href"] as String,
         stringObjectMap["popularitet"] as String,
         stringObjectMap["verdi"] as String,
-        stringObjectMap["timestamp"] as String,
+        (stringObjectMap["timestamp"] as String).let { LocalDateTime.parse(it, datePattern) },
         stringObjectMap["kategori"] as String?
     )
+
+    private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'")
 }

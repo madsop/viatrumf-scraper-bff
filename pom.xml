@@ -14,7 +14,7 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkus.version>3.38.3</quarkus.version>
+    <quarkus.version>3.39.3</quarkus.version>
     <final.name>viatrumf-scraper-bff</final.name>
     <kotlin.version>2.4.10</kotlin.version>
   </properties>

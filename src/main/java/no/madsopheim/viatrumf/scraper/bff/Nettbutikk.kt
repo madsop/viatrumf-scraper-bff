@@ -13,7 +13,7 @@ data class Nettbutikk(
     constructor(stringObjectMap: Map<String, Any>) : this(
         namn = stringObjectMap["namn"].toString(),
         href = stringObjectMap["href"].toString(),
-        verdi = stringObjectMap["verdi"]?.toString()?.takeIf { it.isNotEmpty() } ?: stringObjectMap["points"].toString(),
+        verdi = stringObjectMap["verdi"]?.toString()?.takeIf { it.isNotEmpty() } ?: stringObjectMap["pointsCampaign"]?.toString()?.takeIf { it.isNotEmpty() } ?: stringObjectMap["points"].toString(),
         timestamp = LocalDateTime.parse(stringObjectMap["timestamp"].toString(), datePattern),
         kategori = stringObjectMap["kategori"]?.toString()?.takeIf { it.isNotEmpty() },
         type = stringObjectMap["currency"]?.toString()?.takeIf { it.isNotEmpty() }?.let { Type.valueOf(it.uppercase()) }

@@ -13,11 +13,16 @@ data class Nettbutikk(
     constructor(stringObjectMap: Map<String, Any>) : this(
         namn = stringObjectMap["namn"].toString(),
         href = stringObjectMap["href"].toString(),
-        verdi = stringObjectMap["verdi"]?.toString()?.takeIf { it.isNotEmpty() } ?: stringObjectMap["pointsCampaign"]?.toString()?.takeIf { it.isNotEmpty() }?.takeIf { (it.toIntOrNull() ?: 0)  > 0 } ?: stringObjectMap["points"].toString(),
+        verdi = stringObjectMap["verdi"]?.toString()?.takeIf { it.isNotEmpty() } ?: stringObjectMap["pointsCampaign"]?.hasValue() ?: stringObjectMap["points"].toString(),
         timestamp = LocalDateTime.parse(stringObjectMap["timestamp"].toString(), datePattern),
         kategori = stringObjectMap["kategori"]?.toString()?.takeIf { it.isNotEmpty() },
         type = stringObjectMap["currency"]?.toString()?.takeIf { it.isNotEmpty() }?.let { Type.valueOf(it.uppercase()) }
     )
+
+    companion object {
+        private fun Any?.hasValue() =
+            toString().takeIf { it.isNotEmpty() }?.takeIf { (it.toDoubleOrNull() ?: 0.0) > 0.1 }
+    }
 }
 
 enum class Type {
